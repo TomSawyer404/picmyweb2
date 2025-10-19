@@ -303,10 +303,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("  - IP地址: {}", ip_count);
     println!("  - IP:端口: {}", ip_port_count);
 
-    // 创建日志文件
+    // 创建日志文件（追加模式）
     let screenshots_dir = ensure_screenshots_dir()?;
     let log_path = format!("{}\\screenshot_log.txt", screenshots_dir);
-    let mut log_file = fs::File::create(&log_path)?;
+    let mut log_file = fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(&log_path)?;
+
+    // 添加分隔线标识新的运行会话
+    let separator = "=".repeat(60);
+    let session_start = format!("新的截图会话开始 {}", separator);
+    log_to_file(&mut log_file, &session_start)?;
 
     let start_message = format!("开始截图，目标数量: {}", targets.len());
     println!("\n{}", start_message);
@@ -341,6 +349,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let completion_message = format!("截图完成! 成功: {}, 失败: {}", success_count, fail_count);
     println!("\n{}", completion_message);
     log_to_file(&mut log_file, &completion_message)?;
+
+    let session_end = format!("截图会话结束 {}", separator);
+    log_to_file(&mut log_file, &session_end)?;
+    log_to_file(&mut log_file, "")?; // 添加空行分隔不同会话
 
     println!("截图保存在: {}", screenshots_dir);
     println!("日志文件: {}", log_path);
