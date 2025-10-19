@@ -38,7 +38,7 @@ impl Target {
 
         // 添加协议前缀如果缺失
         let url = if !trimmed.starts_with("http://") && !trimmed.starts_with("https://") {
-            format!("https://{}", trimmed)
+            format!("http://{}", trimmed)
         } else {
             trimmed.clone()
         };

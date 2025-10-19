@@ -49,9 +49,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let csv_writer_arc = Arc::new(Mutex::new(csv_writer));
 
     // 开始异步截图会话
-    start_async_screenshot_session(&targets, config, csv_writer_arc, &csv_path).await?;
+    let (success_count, fail_count) =
+        start_async_screenshot_session(&targets, config.clone(), csv_writer_arc).await?;
 
-    info!("应用程序正常退出");
+    // 输出最终结果信息
+    let completion_message = format!(
+        "异步截图完成! 成功: {}, 失败: {}，成功率：{:.2}%",
+        success_count,
+        fail_count,
+        (success_count as f64 / (success_count + fail_count) as f64) * 100.0
+    );
+    println!("{}", completion_message);
+    println!("截图保存在: {}", config.screenshots_dir);
+    println!("CSV日志文件: {}", csv_path);
+    println!("应用程序正常退出");
     Ok(())
 }
 
@@ -85,8 +96,7 @@ async fn start_async_screenshot_session(
     targets: &[Target],
     config: AppConfig,
     csv_writer_arc: Arc<Mutex<Writer<fs::File>>>,
-    csv_path: &str,
-) -> Result<(), Box<dyn std::error::Error>> {
+) -> Result<(usize, usize), Box<dyn std::error::Error>> {
     let start_message = format!(
         "开始异步截图，目标数量: {}, 并发数: {}",
         targets.len(),
@@ -167,14 +177,5 @@ async fn start_async_screenshot_session(
         })
         .await;
 
-    let completion_message = format!(
-        "异步截图完成! 成功: {}, 失败: {}",
-        success_count, fail_count
-    );
-    info!("{}", completion_message);
-
-    info!("截图保存在: {}", config.screenshots_dir);
-    info!("CSV日志文件: {}", csv_path);
-
-    Ok(())
+    Ok((success_count, fail_count))
 }
