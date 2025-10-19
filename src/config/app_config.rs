@@ -13,8 +13,8 @@ pub struct AppConfig {
     pub screenshots_dir: String,
     /// 用户代理字符串
     pub user_agent: String,
-    /// 截图之间的延迟（秒）
-    pub delay_between_screenshots: u64,
+    /// 并发线程数
+    pub concurrency: usize,
 }
 
 impl Default for AppConfig {
@@ -25,7 +25,7 @@ impl Default for AppConfig {
             window_size: (414, 896), // iPhone XR 尺寸
             screenshots_dir: Self::get_default_screenshots_dir(),
             user_agent: "User-Agent,Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_3 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5".to_string(),
-            delay_between_screenshots: 1,
+            concurrency: 4, // 默认4个并发线程
         }
     }
 }
@@ -43,10 +43,5 @@ impl AppConfig {
     /// 获取等待超时时间
     pub fn get_timeout_duration(&self) -> Duration {
         Duration::from_secs(self.timeout_seconds)
-    }
-
-    /// 获取截图之间的延迟时间
-    pub fn get_delay_duration(&self) -> Duration {
-        Duration::from_secs(self.delay_between_screenshots)
     }
 }

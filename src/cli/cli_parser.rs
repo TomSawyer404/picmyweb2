@@ -29,6 +29,14 @@ impl CliParser {
                     .default_value("5"),
             )
             .arg(
+                Arg::new("concurrency")
+                    .short('c')
+                    .long("concurrency")
+                    .value_name("THREADS")
+                    .help("并发线程数")
+                    .default_value("4"),
+            )
+            .arg(
                 Arg::new("headless")
                     .long("headless")
                     .help("是否使用无头模式（默认启用）"),
@@ -48,10 +56,17 @@ impl CliParser {
             .parse()
             .unwrap_or(5);
 
+        let concurrency: usize = matches
+            .get_one::<String>("concurrency")
+            .unwrap()
+            .parse()
+            .unwrap_or(4);
+
         let headless = !matches.contains_id("headless"); // 默认启用无头模式
 
         let mut config = AppConfig::default();
         config.timeout_seconds = timeout;
+        config.concurrency = concurrency;
         config.headless = headless;
 
         if let Some(output_dir) = matches.get_one::<String>("output") {

@@ -14,4 +14,6 @@ pub use cli::cli_parser::CliParser;
 pub use config::app_config::AppConfig;
 pub use file_io::file_operations::FileOperations;
 pub use models::target::{Target, TargetType};
+pub use screenshot::async_screenshot_service::AsyncScreenshotService;
+pub use screenshot::concurrent_executor::ConcurrentExecutor;
 pub use screenshot::screenshot_service::ScreenshotService;
