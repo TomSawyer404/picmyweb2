@@ -14,9 +14,9 @@ impl fmt::Display for TargetType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             TargetType::Url => write!(f, "URL"),
-            TargetType::Domain => write!(f, "域名"),
-            TargetType::Ip => write!(f, "IP地址"),
-            TargetType::IpPort => write!(f, "IP:端口"),
+            TargetType::Domain => write!(f, "Domain"),
+            TargetType::Ip => write!(f, "IP"),
+            TargetType::IpPort => write!(f, "IP:Port"),
         }
     }
 }

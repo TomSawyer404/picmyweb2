@@ -9,11 +9,11 @@ pub mod models;
 pub mod screenshot;
 pub mod utils;
 
-// 重新导出常用类型，方便外部使用
 pub use cli::cli_parser::CliParser;
 pub use config::app_config::AppConfig;
 pub use file_io::file_operations::FileOperations;
-pub use models::target::{Target, TargetType};
-pub use screenshot::async_screenshot_service::AsyncScreenshotService;
-pub use screenshot::concurrent_executor::ConcurrentExecutor;
-pub use screenshot::screenshot_service::ScreenshotService;
+pub use models::target::{ScreenshotResult, Target, TargetType};
+pub use screenshot::{
+    async_screenshot_service::AsyncScreenshotService, concurrent_executor::ConcurrentExecutor,
+    screenshot_service::ScreenshotService,
+};
