@@ -9,7 +9,7 @@ impl CliParser {
     /// 解析命令行参数
     pub fn parse() -> AppConfig {
         let matches = Command::new("picmyweb2")
-            .version("0.1.1")
+            .version(env!("CARGO_PKG_VERSION"))
             .about("网页截图工具 - 从文本文件读取URL并截图")
             .author("MrBanana @ 佛子岭日夜加班有限公司")
             .arg(
